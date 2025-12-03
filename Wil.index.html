@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop Price Calculator</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 30px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .product-list {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .product-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px dashed #ddd;
+        }
+        
+        .product-item:last-child {
+            border-bottom: none;
+        }
+        
+        .product-name {
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+        
+        .product-price {
+            font-weight: 700;
+            color: #2575fc;
+            font-size: 1.1rem;
+        }
+        
+        .calculator {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #444;
+        }
+        
+        input[type="number"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        input[type="number"]:focus {
+            border-color: #2575fc;
+            outline: none;
+        }
+        
+        .calculate-btn {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            border: none;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+        }
+        
+        .calculate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(37, 117, 252, 0.3);
+        }
+        
+        .calculate-btn:active {
+            transform: translateY(0);
+        }
+        
+        .result-container {
+            background-color: #f0f7ff;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+            border-left: 5px solid #2575fc;
+        }
+        
+        .result-title {
+            font-size: 1.2rem;
+            color: #555;
+            margin-bottom: 10px;
+        }
+        
+        #totalAmount {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #2575fc;
+            margin: 10px 0;
+        }
+        
+        .currency {
+            font-size: 1.5rem;
+            color: #6a11cb;
+        }
+        
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            min-height: 20px;
+        }
+        
+        .instructions {
+            background-color: #fff8e1;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+            font-size: 0.95rem;
+            border-left: 5px solid #ffc107;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+            font-size: 0.9rem;
+            border-top: 1px solid #eee;
+            margin-top: 20px;
+        }
+        
+        .product-icon {
+            font-size: 1.5rem;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🛒 Shop Price Calculator</h1>
+            <p class="subtitle">Calculate the total cost of your selected items</p>
+        </header>
+        
+        <div class="content">
+            <div class="product-list">
+                <h2>Available Products</h2>
+                <div class="product-item">
+                    <div>
+                        <span class="product-icon">🍞</span>
+                        <span class="product-name">Bread</span>
+                    </div>
+                    <div class="product-price">3,000 UGX</div>
+                </div>
+                <div class="product-item">
+                    <div>
+                        <span class="product-icon">🥛</span>
+                        <span class="product-name">Milk</span>
+                    </div>
+                    <div class="product-price">2,500 UGX</div>
+                </div>
+                <div class="product-item">
+                    <div>
+                        <span class="product-icon">🥚</span>
+                        <span class="product-name">Eggs</span>
+                    </div>
+                    <div class="product-price">500 UGX each</div>
+                </div>
+            </div>
+            
+            <div class="calculator">
+                <h2>Calculate Your Total</h2>
+                <p>Enter the quantity for each item:</p>
+                
+                <div class="input-group">
+                    <label for="breadQty">Bread Quantity:</label>
+                    <input type="number" id="breadQty" min="0" value="0">
+                    <div id="breadError" class="error-message"></div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="milkQty">Milk Quantity:</label>
+                    <input type="number" id="milkQty" min="0" value="0">
+                    <div id="milkError" class="error-message"></div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="eggsQty">Eggs Quantity:</label>
+                    <input type="number" id="eggsQty" min="0" value="0">
+                    <div id="eggsError" class="error-message"></div>
+                </div>
+                
+                <button id="calculateBtn" class="calculate-btn">Calculate Total</button>
+                
+                <div class="result-container">
+                    <div class="result-title">Total Amount Payable:</div>
+                    <div id="totalAmount">0</div>
+                    <div class="currency">UGX</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="instructions">
+            <h3>Instructions:</h3>
+            <p>1. Enter the quantity for each item you want to purchase.</p>
+            <p>2. Click the "Calculate Total" button to see your total cost.</p>
+            <p>3. If you enter invalid values (negative numbers or non-numeric), an error message will appear.</p>
+        </div>
+        
+        <footer>
+            <p>Shop Price Calculator | JavaScript Assignment</p>
+        </footer>
+    </div>
+
+    <script>
+        // Product prices
+        const BREAD_PRICE = 3000;
+        const MILK_PRICE = 2500;
+        const EGG_PRICE = 500;
+        
+        // Get DOM elements
+        const breadInput = document.getElementById('breadQty');
+        const milkInput = document.getElementById('milkQty');
+        const eggsInput = document.getElementById('eggsQty');
+        const calculateBtn = document.getElementById('calculateBtn');
+        const totalAmountDisplay = document.getElementById('totalAmount');
+        const breadError = document.getElementById('breadError');
+        const milkError = document.getElementById('milkError');
+        const eggsError = document.getElementById('eggsError');
+        
+        // Function to validate input
+        function validateInput(inputValue, inputName) {
+            if (inputValue === '') {
+                return 'Please enter a quantity';
+            }
+            
+            const numValue = Number(inputValue);
+            
+            if (isNaN(numValue)) {
+                return 'Please enter a valid number';
+            }
+            
+            if (numValue < 0) {
+                return 'Quantity cannot be negative';
+            }
+            
+            if (!Number.isInteger(numValue)) {
+                return 'Please enter a whole number';
+            }
+            
+            return ''; // No error
+        }
+        
+        // Function to calculate total cost
+        function calculateTotal() {
+            // Reset error messages
+            breadError.textContent = '';
+            milkError.textContent = '';
+            eggsError.textContent = '';
+            
+            // Get input values
+            const breadQty = breadInput.value;
+            const milkQty = milkInput.value;
+            const eggsQty = eggsInput.value;
+            
+            // Validate inputs
+            const breadValidation = validateInput(breadQty, 'bread');
+            const milkValidation = validateInput(milkQty, 'milk');
+            const eggsValidation = validateInput(eggsQty, 'eggs');
+            
+            // Display validation errors if any
+            if (breadValidation) breadError.textContent = breadValidation;
+            if (milkValidation) milkError.textContent = milkValidation;
+            if (eggsValidation) eggsError.textContent = eggsValidation;
+            
+            // If any validation failed, don't calculate
+            if (breadValidation || milkValidation || eggsValidation) {
+                totalAmountDisplay.textContent = '0';
+                return;
+            }
+            
+            // Convert to numbers and calculate total
+            const breadTotal = Number(breadQty) * BREAD_PRICE;
+            const milkTotal = Number(milkQty) * MILK_PRICE;
+            const eggsTotal = Number(eggsQty) * EGG_PRICE;
+            
+            const grandTotal = breadTotal + milkTotal + eggsTotal;
+            
+            // Display the total with formatting
+            totalAmountDisplay.textContent = grandTotal.toLocaleString();
+            
+            // Add some visual feedback
+            totalAmountDisplay.style.transform = 'scale(1.1)';
+            setTimeout(() => {
+                totalAmountDisplay.style.transform = 'scale(1)';
+            }, 300);
+        }
+        
+        // Event listener for the calculate button
+        calculateBtn.addEventListener('click', calculateTotal);
+        
+        // Also calculate when user presses Enter in any input field
+        [breadInput, milkInput, eggsInput].forEach(input => {
+            input.addEventListener('keyup', (event) => {
+                if (event.key === 'Enter') {
+                    calculateTotal();
+                }
+            });
+        });
+        
+        // Initialize with zero total
+        calculateTotal();
+    </script>
+</body>
+</html>
